@@ -1,0 +1,29 @@
+.shopping-cart-container {
+  padding: 20px;
+}
+
+.product-list {
+  margin-bottom: 20px;
+}
+
+.product-item {
+  margin-bottom: 10px;
+}
+
+.product-item input {
+  width: 60px;
+  margin-left: 10px;
+}
+
+.cart-summary {
+  margin-top: 20px;
+}
+
+.discount-section {
+  margin-top: 10px;
+}
+
+.discount-section input {
+  width: 200px;
+  margin-right: 10px;
+}

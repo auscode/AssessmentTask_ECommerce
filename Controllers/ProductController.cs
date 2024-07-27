@@ -7,10 +7,10 @@ namespace E_Commerce.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductController: ControllerBase
+public class ProductController : ControllerBase
 {
     private readonly ProductService ProductService;
-    
+
     public ProductController(ProductService productService)
     {
         ProductService = productService;

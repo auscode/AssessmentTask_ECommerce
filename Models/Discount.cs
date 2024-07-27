@@ -3,6 +3,6 @@
 public class Discount
 {
     public int DiscountID { get; set; }
-    public string DiscountCode { get; set; }
+    public required string DiscountCode { get; set; }
     public decimal DiscountPercentage { get; set; }
 }

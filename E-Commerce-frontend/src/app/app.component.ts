@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductListComponent } from "./product-list/product-list.component";
 import { NavbarComponent } from "./navbar/navbar.component";
+// import { ShoppingCartComponent } from './cart/shopping-cart.component';
 
 @Component({
     selector: 'app-root',

@@ -1,0 +1,36 @@
+<div class="shopping-cart-container">
+    <h1>Shopping Cart</h1>
+
+    <!-- List of Products -->
+    <div class="product-list">
+        <h2>Available Products</h2>
+        <div *ngFor="let product of products" class="product-item">
+            <span>{{ product.productName }} - ${{ product.price.toFixed(2) }}</span>
+            <button (click)="addToCart(product)">Add to Cart</button>
+        </div>
+    </div>
+
+
+    <!-- Cart Summary -->
+    <div class="cart-summary">
+        <h2>Cart Summary</h2>
+        <div *ngIf="cartItems.length > 0">
+            <ul>
+                <li *ngFor="let item of cartItems">
+                    {{ item.product.productName }} - {{ item.quantity }} x \${{ item.product.price }} = \${{ item.total
+                    }}
+                </li>
+            </ul>
+            <p>Total Value: \${{ totalValue }}</p>
+
+            <!-- Discount Code -->
+            <div class="discount-section">
+                <input type="text" [(ngModel)]="discountCode" placeholder="Enter discount code" />
+                <button (click)="applyDiscount()">Apply Discount</button>
+                <p *ngIf="discountApplied">Discount Applied: \${{ discountAmount }}</p>
+                <p>Total after Discount: \${{ totalValueAfterDiscount }}</p>
+            </div>
+        </div>
+        <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
+    </div>
+</div>
