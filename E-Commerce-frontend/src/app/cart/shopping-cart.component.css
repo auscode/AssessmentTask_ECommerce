@@ -1,5 +1,11 @@
+h2 {
+  margin-bottom: 5px;
+}
 .shopping-cart-container {
   padding: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 5;
 }
 
 .product-list {
@@ -15,10 +21,6 @@
   margin-left: 10px;
 }
 
-.cart-summary {
-  margin-top: 20px;
-}
-
 .discount-section {
   margin-top: 10px;
 }
@@ -26,4 +28,69 @@
 .discount-section input {
   width: 200px;
   margin-right: 10px;
+}
+table {
+  background: #012b39;
+  border-radius: 0.25em;
+  border-collapse: collapse;
+  margin: 1em;
+}
+th {
+  border-bottom: 1px solid #364043;
+  color: #e2b842;
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+td {
+  color: #fff;
+  font-weight: 400;
+  padding: 0.65em 1em;
+}
+.disabled td {
+  color: #4f5f64;
+}
+tbody tr {
+  transition: background 0.25s ease;
+}
+tbody tr:hover {
+  background: #014055;
+}
+button {
+  padding: 0.5em 1em;
+  margin-right: 0.5em;
+  border: none;
+  border-radius: 0.25em;
+}
+
+/* Existing styles */
+
+form {
+  margin-bottom: 1em;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+form input {
+  padding: 0.5em;
+  margin-right: 1em;
+}
+
+.discount-chip {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 16px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.discount-chip:hover {
+  background-color: #0056b3;
 }

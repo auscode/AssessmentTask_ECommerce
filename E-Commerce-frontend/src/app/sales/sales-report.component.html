@@ -1,0 +1,38 @@
+<div class="sales-report">
+    <h1>Sales Report</h1>
+
+    <div class="report-section">
+        <h2>Total Revenue for the Day</h2>
+        <!-- <p>\${{ totalRevenue | number:'1.2-2' }}</p> -->
+    </div>
+
+    <div class="report-section">
+        <h2>Most Sold Products</h2>
+        <ul>
+            <!-- <li *ngFor="let product of mostSoldProducts">
+                {{ product.name }} ({{ product.quantity }} sold)
+            </li> -->
+        </ul>
+    </div>
+
+    <div class="report-section">
+        <h2>List of Products Sold</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity Sold</th>
+                    <th>Total Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let product of productsSold">
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>\${{ revenueFromProducts.find(p => p.productId === product.id)?.totalRevenue | number:'1.2-2' }}
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+</div>

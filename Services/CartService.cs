@@ -90,22 +90,31 @@ namespace E_Commerce.Services
 
         public async Task<CartItemDTO> UpdateCartItemAsync(CartItem cartItem)
         {
-            _context.CartItems.Update(cartItem);
+            var existingItem = await _context.CartItems.FindAsync(cartItem.CartItemID);
+            if (existingItem == null)
+            {
+                throw new Exception("Cart item not found.");
+            }
+
+            existingItem.Quantity = cartItem.Quantity;
+            _context.CartItems.Update(existingItem);
             await _context.SaveChangesAsync();
 
             return new CartItemDTO
             {
-                CartItemID = cartItem.CartItemID,
-                ProductID = cartItem.ProductID,
-                Quantity = cartItem.Quantity,
+                CartItemID = existingItem.CartItemID,
+                ProductID = existingItem.ProductID,
+                Quantity = existingItem.Quantity,
                 Product = new ProductDTO
                 {
-                    ProductID = cartItem.Product.ProductID,
-                    ProductName = cartItem.Product.ProductName,
-                    Price = cartItem.Product.Price
+                    ProductID = existingItem.Product.ProductID,
+                    ProductName = existingItem.Product.ProductName,
+                    Price = existingItem.Product.Price
                 }
             };
         }
+
+
 
         public async Task<bool> DeleteCartItemAsync(int id)
         {
@@ -130,6 +139,11 @@ namespace E_Commerce.Services
             var total = cartItems.Sum(ci => ci.Quantity * ci.Product.Price);
             var discountedTotal = total - (total * (discountPercentage / 100));
             return discountedTotal;
+        }
+
+        internal async Task UpdateCartItemAsync(CartItemDTO existingItem)
+        {
+            throw new NotImplementedException();
         }
     }
 }

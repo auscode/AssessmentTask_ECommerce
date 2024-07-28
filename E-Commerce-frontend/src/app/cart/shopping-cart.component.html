@@ -1,36 +1,78 @@
-<div class="shopping-cart-container">
+<div>
     <h1>Shopping Cart</h1>
-
-    <!-- List of Products -->
-    <div class="product-list">
-        <h2>Available Products</h2>
-        <div *ngFor="let product of products" class="product-item">
-            <span>{{ product.productName }} - ${{ product.price.toFixed(2) }}</span>
-            <button (click)="addToCart(product)">Add to Cart</button>
+    <div class="shopping-cart-container">
+        <!-- List of Products -->
+        <div class="product-list">
+            <h2>Available Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products">
+                        <td>{{ product.productID }}</td>
+                        <td>{{ product.productName }}</td>
+                        <td>${{ product.price.toFixed(2) }}</td>
+                        <td>
+                            <button (click)="addToCart(product)">Add to Cart</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
 
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+            <h2>Cart Summary</h2>
+            <div *ngIf="cartItems.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of cartItems">
+                            <td>{{ item.product.productName }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.product.price | number:'1.2-2' }}</td>
+                            <td>${{ (item.product.price * item.quantity) | number:'1.2-2' }}</td>
+                            <td>
+                                <button (click)="increaseQuantity(item)">+</button>
+                                <button (click)="decreaseQuantity(item)">-</button>
+                                <button (click)="deleteCartItem(item.cartItemID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Total Value: ${{ totalValue | number:'1.2-2' }}</p>
 
-    <!-- Cart Summary -->
-    <div class="cart-summary">
-        <h2>Cart Summary</h2>
-        <div *ngIf="cartItems.length > 0">
-            <ul>
-                <li *ngFor="let item of cartItems">
-                    {{ item.product.productName }} - {{ item.quantity }} x \${{ item.product.price }} = \${{ item.total
-                    }}
-                </li>
-            </ul>
-            <p>Total Value: \${{ totalValue }}</p>
+                <!-- Available Discounts -->
+                <div class="available-discounts">
+                    <h2>Available Discounts</h2>
+                    <span *ngFor="let discount of discounts" class="discount-chip"
+                        (click)="selectDiscount(discount.discountCode)">
+                        {{ discount.discountCode }} ({{ discount.discountPercentage}}%)
+                    </span>
+                </div>
+                <!-- Discount Code -->
+                <div class="discount-section">
+                    <input type="text" [(ngModel)]="discountCode" placeholder="Enter discount code" />
+                    <p *ngIf="discountApplied">Discount Applied: ${{ discountAmount | number:'1.2-2' }}</p>
+                    <p>Total after Discount: ${{ totalValueAfterDiscount | number:'1.2-2' }}</p>
+                </div>
 
-            <!-- Discount Code -->
-            <div class="discount-section">
-                <input type="text" [(ngModel)]="discountCode" placeholder="Enter discount code" />
-                <button (click)="applyDiscount()">Apply Discount</button>
-                <p *ngIf="discountApplied">Discount Applied: \${{ discountAmount }}</p>
-                <p>Total after Discount: \${{ totalValueAfterDiscount }}</p>
             </div>
+            <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
         </div>
-        <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
     </div>
 </div>

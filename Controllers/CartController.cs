@@ -16,6 +16,38 @@ namespace E_Commerce.Controllers
             _cartService = cartService;
         }
 
+        private CartItem ConvertToEntity(CartItemDTO dto)
+        {
+            return new CartItem
+            {
+                CartItemID = dto.CartItemID,
+                ProductID = dto.ProductID,
+                Quantity = dto.Quantity,
+                Product = new Product
+                {
+                    ProductID = dto.Product.ProductID,
+                    ProductName = dto.Product.ProductName,
+                    Price = dto.Product.Price
+                }
+            };
+        }
+
+        private CartItemDTO ConvertToDto(CartItem entity)
+        {
+            return new CartItemDTO
+            {
+                CartItemID = entity.CartItemID,
+                ProductID = entity.ProductID,
+                Quantity = entity.Quantity,
+                Product = new ProductDTO
+                {
+                    ProductID = entity.Product.ProductID,
+                    ProductName = entity.Product.ProductName,
+                    Price = entity.Product.Price
+                }
+            };
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CartItemDTO>>> GetCartItems()
         {
@@ -24,9 +56,8 @@ namespace E_Commerce.Controllers
                 var cartItems = await _cartService.GetCartItemsAsync();
                 return Ok(cartItems);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception or return an appropriate error response
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -43,14 +74,13 @@ namespace E_Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CartItemDTO>> PostCartItem(CartItemDTO cartItemDto)
+        public async Task<ActionResult<CartItemDTO>> PostCartItem([FromBody] CartItemDTO cartItemDto)
         {
             if (cartItemDto == null)
             {
                 return BadRequest("CartItemDTO is null.");
             }
 
-            // Ensure the Product exists
             var product = await _cartService.GetProductByIdAsync(cartItemDto.ProductID);
             if (product == null)
             {
@@ -61,54 +91,69 @@ namespace E_Commerce.Controllers
             {
                 ProductID = cartItemDto.ProductID,
                 Quantity = cartItemDto.Quantity,
-                Product = product  // Initialize the Product property
+                Product = product
             };
-
-            var createdCartItem = await _cartService.AddCartItemAsync(cartItem);
-            var createdCartItemDto = new CartItemDTO
-            {
-                CartItemID = createdCartItem.CartItemID,
-                ProductID = createdCartItem.ProductID,
-                Quantity = createdCartItem.Quantity,
-                Product = new ProductDTO
-                {
-                    ProductID = createdCartItem.Product.ProductID,
-                    ProductName = createdCartItem.Product.ProductName,
-                    Price = createdCartItem.Product.Price
-                }
-            };
-
-            return CreatedAtAction(nameof(GetCartItem), new { id = createdCartItemDto.CartItemID }, createdCartItemDto);
-        }
-
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCartItem(int id, CartItem cartItem)
-        {
-            if (id != cartItem.CartItemID)
-            {
-                return BadRequest();
-            }
 
             try
             {
-                await _cartService.UpdateCartItemAsync(cartItem);
+                var createdCartItem = await _cartService.AddCartItemAsync(cartItem);
+                var createdCartItemDto = new CartItemDTO
+                {
+                    CartItemID = createdCartItem.CartItemID,
+                    ProductID = createdCartItem.ProductID,
+                    Quantity = createdCartItem.Quantity,
+                    Product = new ProductDTO
+                    {
+                        ProductID = createdCartItem.Product.ProductID,
+                        ProductName = createdCartItem.Product.ProductName,
+                        Price = createdCartItem.Product.Price
+                    }
+                };
+
+                return CreatedAtAction(nameof(GetCartItem), new { id = createdCartItemDto.CartItemID }, createdCartItemDto);
             }
             catch (Exception)
             {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCartItem(int id, [FromBody] CartItemDTO updatedItemDto)
+        {
+            if (updatedItemDto == null)
+            {
+                return BadRequest("Invalid cart item data.");
+            }
+
+            if (id != updatedItemDto.CartItemID)
+            {
+                return BadRequest("ID mismatch.");
+            }
+
+            // Convert DTO to Entity
+            var cartItem = ConvertToEntity(updatedItemDto);
+
+            try
+            {
+                var updatedCartItem = await _cartService.UpdateCartItemAsync(cartItem);
+                return Ok(updatedCartItem);
+            }
+            catch (Exception)
+            {
+                // Handle and log the exception
                 if (await _cartService.GetCartItemByIdAsync(id) == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return StatusCode(500, "Internal server error");
                 }
             }
-
-            return NoContent();
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCartItem(int id)
@@ -121,6 +166,7 @@ namespace E_Commerce.Controllers
             return NoContent();
         }
 
+        // Consider removing if not needed
         [HttpPost("calculate")]
         public async Task<ActionResult<decimal>> CalculateCartTotal(int cartId, decimal discountPercentage)
         {
@@ -129,4 +175,3 @@ namespace E_Commerce.Controllers
         }
     }
 }
-

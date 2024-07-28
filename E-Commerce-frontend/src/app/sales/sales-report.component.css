@@ -1,0 +1,32 @@
+.sales-report {
+  padding: 20px;
+}
+
+.report-section {
+  margin-bottom: 20px;
+}
+
+.report-section h2 {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+button {
+  padding: 0.5em 1em;
+  margin-right: 0.5em;
+  border: none;
+  border-radius: 0.25em;
+}

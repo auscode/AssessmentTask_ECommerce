@@ -1,24 +1,57 @@
-<!-- src/app/product-list/product-list.component.html -->
-<div class="content">
-  <div>
-    <h2>Product List</h2>
+<div>
+  <h2>Product List</h2>
+  <div class="content">
+    <!-- Add Product Form -->
+    <div *ngIf="!isEditMode">
+      <h3>Add New Product</h3>
+      <form (ngSubmit)="addProduct()">
+        <label>
+          Name:
+          <input [(ngModel)]="newProduct.productName" name="name" required />
+        </label>
+        <label>
+          Price:
+          <input type="number" [(ngModel)]="newProduct.price" name="price" required />
+        </label>
+        <button type="submit">Add Product</button>
+      </form>
+    </div>
+    <!-- Edit Product Form -->
+    <div *ngIf="isEditMode && selectedProduct">
+      <h3>Edit Product</h3>
+      <form (ngSubmit)="updateProduct()">
+        <label>
+          Name:
+          <input [(ngModel)]="selectedProduct.productName" name="name" required />
+        </label>
+        <label>
+          Price:
+          <input type="number" [(ngModel)]="selectedProduct.price" name="price" required />
+        </label>
+        <button type="submit">Update Product</button>
+        <button type="button" (click)="cancelEdit()">Cancel</button>
+      </form>
+    </div>
 
-
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Actions</th>
-      </tr>
-      <tr *ngFor="let product of products">
-        <td>{{ product.productID }}</td>
-        <td>{{ product.productName }}</td>
-        <td>{{ product.price }}</td>
-        <td><button (click)="deleteProduct(product.productID)">Delete</button></td>
-      </tr>
-    </table>
+    <div>
+      <!-- Product List Table -->
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+        <tr *ngFor="let product of products">
+          <td>{{ product.productID }}</td>
+          <td>{{ product.productName }}</td>
+          <td>{{ product.price }}</td>
+          <td>
+            <button (click)="editProduct(product)">Edit</button>
+            <button (click)="deleteProduct(product.productID)">Delete</button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
-
-  
