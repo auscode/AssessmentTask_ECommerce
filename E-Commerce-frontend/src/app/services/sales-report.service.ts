@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SalesReportService {
-  private apiUrl = 'https://your-api-endpoint/api/sales-report'; // Replace with your actual API endpoint
+  private baseUrl = 'http://localhost:5182/salesreport';
 
   constructor(private http: HttpClient) { }
 
   getDailySalesReport(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(`${this.baseUrl}/daily`);
   }
 }

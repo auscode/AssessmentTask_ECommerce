@@ -70,7 +70,8 @@
                     <p *ngIf="discountApplied">Discount Applied: ${{ discountAmount | number:'1.2-2' }}</p>
                     <p>Total after Discount: ${{ totalValueAfterDiscount | number:'1.2-2' }}</p>
                 </div>
-
+                <!-- Buy All Button -->
+                <button (click)="buyAll()">Buy All</button>
             </div>
             <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
         </div>

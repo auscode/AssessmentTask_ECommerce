@@ -1,38 +1,29 @@
-<div class="sales-report">
-    <h1>Sales Report</h1>
+<!-- <div>
+    <h2>Sales Report</h2>
+    <p><strong>Total Revenue for the Day:</strong> {{ totalRevenue | currency }}</p>
 
-    <div class="report-section">
-        <h2>Total Revenue for the Day</h2>
-        <!-- <p>\${{ totalRevenue | number:'1.2-2' }}</p> -->
-    </div>
+    <h3>Most Sold Products</h3>
+    <ul>
+        <li *ngFor="let product of mostSoldProducts">
+            {{ product.productName }} - {{ product.price | currency }}
+        </li>
+    </ul>
 
-    <div class="report-section">
-        <h2>Most Sold Products</h2>
-        <ul>
-            <!-- <li *ngFor="let product of mostSoldProducts">
-                {{ product.name }} ({{ product.quantity }} sold)
-            </li> -->
-        </ul>
-    </div>
-
-    <div class="report-section">
-        <h2>List of Products Sold</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Quantity Sold</th>
-                    <th>Total Revenue</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- <tr *ngFor="let product of productsSold">
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>\${{ revenueFromProducts.find(p => p.productId === product.id)?.totalRevenue | number:'1.2-2' }}
-                    </td>
-                </tr> -->
-            </tbody>
-        </table>
-    </div>
+    <h3>Products Sold</h3>
+    <ul>
+        <li *ngFor="let item of productsSold">
+            {{ item.productName }}: {{ quantitiesSold[productsSold.indexOf(item)] }} units
+        </li>
+    </ul>
+</div> -->
+<div>
+    <h2>Sales Items</h2>
+    <ul>
+        <li *ngFor="let item of salesItems">
+            <strong>Product ID:</strong> {{ item.productID }},
+            <strong>Sale ID:</strong> {{ item.saleID }},
+            <strong>Quantity:</strong> {{ item.quantity }},
+            <strong>Price:</strong> {{ item.price | currency }}
+        </li>
+    </ul>
 </div>

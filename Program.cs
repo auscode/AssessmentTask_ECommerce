@@ -11,8 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<CartService>();
-builder.Services.AddScoped<SalesReportService>();
-builder.Services.AddScoped<ISalesItemService, SalesItemService>();
+builder.Services.AddScoped<SalesService>();
+// builder.Services.AddScoped<ISalesItemService, SalesItemService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",

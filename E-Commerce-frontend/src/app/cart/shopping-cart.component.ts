@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../services/product.service';
+import { CartService } from '../services/cart.service';
+import { DiscountService } from '../services/discount.service';
+import { SalesService } from '../services/sales.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../services/product.service'; // Adjust path as necessary
-import { CartService } from '../services/cart.service'; // Adjust path as necessary
-import { DiscountService } from '../services/discount.service'; // Adjust path as necessary
-import { CommonModule } from '@angular/common';  // Add this line
 
 @Component({
   selector: 'app-shopping-cart',
@@ -15,7 +16,7 @@ import { CommonModule } from '@angular/common';  // Add this line
 export class ShoppingCartComponent implements OnInit {
   products: any[] = [];
   cartItems: any[] = [];
-  discounts: any[] = []; // Array to store available discounts
+  discounts: any[] = [];
   discountCode: string = '';
   discountApplied: boolean = false;
   discountAmount: number = 0;
@@ -25,13 +26,14 @@ export class ShoppingCartComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private discountService: DiscountService // Inject the DiscountService
+    private discountService: DiscountService,
+    private salesService: SalesService
   ) { }
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadCart();
-    this.loadDiscounts(); // Fetch available discounts
+    this.loadDiscounts();
   }
 
   loadProducts(): void {
@@ -56,6 +58,7 @@ export class ShoppingCartComponent implements OnInit {
     this.discountService.getDiscounts().subscribe({
       next: (discounts) => {
         this.discounts = discounts;
+        this.applyDiscount();
       },
       error: (error) => {
         console.error("Error loading discounts:", error);
@@ -95,27 +98,47 @@ export class ShoppingCartComponent implements OnInit {
     const discount = this.discounts.find(d => d.discountCode === this.discountCode);
     if (discount) {
       this.discountApplied = true;
-      // Ensure discount percentage is used as a decimal
-      this.discountAmount = this.totalValue * (discount.discountPercentage / 100);
-      this.totalValueAfterDiscount = this.totalValue - this.discountAmount;
+      const discountPercentage = discount.discountPercentage / 100;
+      this.discountAmount = this.totalValue * discountPercentage;
     } else {
       this.discountApplied = false;
       this.discountAmount = 0;
+    }
+    this.calculateTotal();
+  }
+
+  selectDiscount(discountCode: string): void {
+    this.discountCode = discountCode;
+    this.applyDiscount();
+  }
+
+  calculateTotal(): void {
+    this.totalValue = this.cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+
+    if (this.discountApplied) {
+      this.totalValueAfterDiscount = this.totalValue - this.discountAmount;
+    } else {
       this.totalValueAfterDiscount = this.totalValue;
     }
   }
 
+  buyAll(): void {
+    const salesData = this.cartItems.map(item => ({
+      saleID: 0, // Replace with appropriate logic for saleID
+      productID: item.product.productID,
+      quantity: item.quantity,
+      price: item.product.price
+    }));
 
-  selectDiscount(discountCode: string): void {
-    this.discountCode = discountCode;
-    this.applyDiscount(); // Recalculate total value with the selected discount
+    this.salesService.createSalesReport(salesData).subscribe({
+      next: (response) => {
+        console.log("Sales report created successfully:", response);
+        this.cartItems = []; // Clear the cart after successful sale
+        this.calculateTotal(); // Update totals
+      },
+      error: (error) => {
+        console.error("Error creating sales report:", error);
+      }
+    });
   }
-
-  calculateTotal(): void {
-  // Sum up total value of cart items
-  this.totalValue = this.cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
-
-  // Calculate the total value after discount
-  this.totalValueAfterDiscount = this.totalValue - this.discountAmount;
-}
 }

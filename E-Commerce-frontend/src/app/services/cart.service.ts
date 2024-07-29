@@ -44,4 +44,8 @@ export class CartService {
   calculateCart(): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/calculate`, {});
   }
+   clearCart(): Observable<void> {
+    console.log("clearCart fxn in certservicets")
+    return this.http.delete<void>(`${this.apiUrl}/clear`);
+  }
 }

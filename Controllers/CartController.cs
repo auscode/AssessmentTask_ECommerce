@@ -10,10 +10,12 @@ namespace E_Commerce.Controllers
     public class CartController : ControllerBase
     {
         private readonly CartService _cartService;
+        private readonly ApplicationDbContext _context;
 
-        public CartController(CartService cartService)
+        public CartController(CartService cartService, ApplicationDbContext context)
         {
             _cartService = cartService;
+            _context = context;
         }
 
         private CartItem ConvertToEntity(CartItemDTO dto)
@@ -172,6 +174,14 @@ namespace E_Commerce.Controllers
         {
             var total = await _cartService.CalculateCartTotalAsync(cartId, discountPercentage);
             return Ok(total);
+        }
+        [HttpDelete("clear")]
+        public IActionResult ClearCart()
+        {
+            var cartItems = _context.CartItems.ToList();
+            _context.CartItems.RemoveRange(cartItems);
+            _context.SaveChanges();
+            return NoContent();
         }
     }
 }

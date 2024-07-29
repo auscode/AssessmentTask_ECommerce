@@ -29,15 +29,15 @@ public class ApplicationDbContext : DbContext
             .WithMany(p => p.CartItems)
             .HasForeignKey(ci => ci.ProductID);
 
-        modelBuilder.Entity<SalesItem>()
-            .HasOne(si => si.Sale)
-            .WithMany(s => s.SalesItems)
-            .HasForeignKey(si => si.SaleID);
+        // modelBuilder.Entity<SalesItem>()
+        //     .HasOne(si => si.Sale)
+        //     .WithMany(s => s.SalesItems)
+        //     .HasForeignKey(si => si.SaleID);
 
-        modelBuilder.Entity<SalesItem>()
-            .HasOne(si => si.Product)
-            .WithMany(p => p.SalesItems)
-            .HasForeignKey(si => si.ProductID);
+        // modelBuilder.Entity<SalesItem>()
+        //     .HasOne(si => si.Product)
+        //     .WithMany(p => p.SalesItems)
+        //     .HasForeignKey(si => si.ProductID);
 
         // Additional configurations as needed
     }
